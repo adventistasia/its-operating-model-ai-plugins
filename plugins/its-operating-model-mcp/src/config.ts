@@ -5,9 +5,9 @@ import {
   CONFIG_FILE_NAME,
   DEFAULT_REPO_BRANCH,
   DEFAULT_REPO_URL,
-} from "./constants";
+} from "./constants.js";
 
-export { CONFIG_FILE_NAME, DEFAULT_REPO_BRANCH, DEFAULT_REPO_URL } from "./constants";
+export { CONFIG_FILE_NAME, DEFAULT_REPO_BRANCH, DEFAULT_REPO_URL } from "./constants.js";
 
 export type PluginConfig = {
   setupCompleted: boolean;
