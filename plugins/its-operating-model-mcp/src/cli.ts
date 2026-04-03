@@ -1,5 +1,5 @@
-import { join } from "node:path";
-import { pathToFileURL } from "node:url";
+import { dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { loadPluginConfig, savePluginConfig } from "./config.js";
 import {
   applyRepoUpdate,
@@ -37,7 +37,7 @@ export function formatUpdateMessage(result: {
 
 export async function main(): Promise<void> {
   const { command } = parseCliArgs(process.argv.slice(2));
-  const pluginRoot = join(import.meta.dirname, "..");
+  const pluginRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
   let config = loadPluginConfig(pluginRoot);
 
   if (command === "setup") {
