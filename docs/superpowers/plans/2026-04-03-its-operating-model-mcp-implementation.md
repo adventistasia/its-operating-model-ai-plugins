@@ -124,7 +124,7 @@ git commit -m "feat: scaffold ITS operating model MCP plugin"
 - Create: `plugins/its-operating-model-mcp/src/config.ts`
 - Modify: `plugins/its-operating-model-mcp/tests/config.test.ts`
 
-- [ ] **Step 1: Write the failing config tests**
+- [x] **Step 1: Write the failing config tests**
 
 ```ts
 import { afterEach, describe, expect, it } from "vitest";
@@ -158,12 +158,12 @@ describe("config persistence", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-Run: `npm test -- --run tests/config.test.ts`
+Run: `bun test ./tests/config.test.ts`
 Expected: FAIL with missing `../src/config`
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 ```ts
 // constants.ts
@@ -189,12 +189,12 @@ export function loadPluginConfig(root: string): PluginConfig { const path = getC
 export function savePluginConfig(root: string, config: PluginConfig): void { mkdirSync(getConfigDir(root), { recursive: true }); writeFileSync(getConfigPath(root), JSON.stringify(config, null, 2)); }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
-Run: `npm test -- --run tests/config.test.ts`
+Run: `bun test ./tests/config.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add plugins/its-operating-model-mcp/src/constants.ts plugins/its-operating-model-mcp/src/config.ts plugins/its-operating-model-mcp/tests/config.test.ts
@@ -237,7 +237,7 @@ describe("repo manager", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `npm test -- --run tests/repo-manager.test.ts`
+Run: `bun test ./tests/repo-manager.test.ts`
 Expected: FAIL with missing `../src/repo-manager`
 
 - [ ] **Step 3: Write the implementation**
@@ -269,7 +269,7 @@ export async function applyRepoUpdate(config: PluginConfig): Promise<PluginConfi
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `npm test -- --run tests/repo-manager.test.ts`
+Run: `bun test ./tests/repo-manager.test.ts`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
@@ -300,7 +300,7 @@ describe("document routing", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `npm test -- --run tests/documents.test.ts`
+Run: `bun test ./tests/documents.test.ts`
 Expected: FAIL with missing `../src/documents`
 
 - [ ] **Step 3: Write the implementation**
@@ -326,7 +326,7 @@ export function getStageGuidance(stageOrIntent: string): DocumentRecord | undefi
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `npm test -- --run tests/documents.test.ts`
+Run: `bun test ./tests/documents.test.ts`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
@@ -357,7 +357,7 @@ describe("cli helpers", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `npm test -- --run tests/repo-manager.test.ts`
+Run: `bun test ./tests/repo-manager.test.ts`
 Expected: FAIL with missing `../src/cli`
 
 - [ ] **Step 3: Write the implementation**
@@ -368,7 +368,7 @@ import { join } from "node:path";
 import { loadPluginConfig, savePluginConfig } from "./config";
 import { applyRepoUpdate, checkForDailyUpdates, createManagedRepo } from "./repo-manager";
 export function parseCliArgs(args: string[]): { command: "setup" | "check-updates" | "update-repo" } { const [command] = args; if (command === "setup" || command === "check-updates" || command === "update-repo") return { command }; throw new Error(`Unsupported command: ${command ?? "undefined"}`); }
-export function formatUpdateMessage(result: { status: "update-available" | "up-to-date"; localCommit: string; remoteCommit: string; }): string { return result.status === "up-to-date" ? `Managed repo is up to date at ${result.localCommit}.` : `Update available. Local ${result.localCommit} -> remote ${result.remoteCommit}. Run npm run update-repo to apply it.`; }
+export function formatUpdateMessage(result: { status: "update-available" | "up-to-date"; localCommit: string; remoteCommit: string; }): string { return result.status === "up-to-date" ? `Managed repo is up to date at ${result.localCommit}.` : `Update available. Local ${result.localCommit} -> remote ${result.remoteCommit}. Run bun run update-repo to apply it.`; }
 async function main(): Promise<void> { const { command } = parseCliArgs(process.argv.slice(2)); const pluginRoot = join(import.meta.dirname, ".."); let config = loadPluginConfig(pluginRoot); if (command === "setup") { config = await createManagedRepo(config); savePluginConfig(pluginRoot, config); console.log(`Managed repo installed at ${config.repoPath}`); return; } const today = new Date().toISOString().slice(0, 10); if (command === "check-updates") { const result = await checkForDailyUpdates(config, today); savePluginConfig(pluginRoot, result.config); if (result.status === "skipped") { console.log("Daily update check already completed today."); return; } console.log(formatUpdateMessage({ status: result.status === "update-available" ? "update-available" : "up-to-date", localCommit: result.config.lastSeenLocalCommit ?? "unknown", remoteCommit: result.config.lastSeenRemoteCommit ?? "unknown" })); return; } config = await applyRepoUpdate(config); savePluginConfig(pluginRoot, config); console.log(`Managed repo updated to ${config.lastSeenLocalCommit}`); }
 void main();
 ```
@@ -391,12 +391,12 @@ await server.connect(new StdioServerTransport());
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `npm test -- --run tests/repo-manager.test.ts tests/documents.test.ts`
+Run: `bun test ./tests/repo-manager.test.ts ./tests/documents.test.ts`
 Expected: PASS
 
 - [ ] **Step 5: Build the plugin**
 
-Run: `npm run build`
+Run: `bun run build`
 Expected: PASS with `dist/cli.js` and `dist/server.js`
 
 - [ ] **Step 6: Commit**
@@ -423,14 +423,14 @@ describe("manual update skill", () => {
   it("documents the managed update workflow", () => {
     const skillPath = resolve(process.cwd(), "plugins/its-operating-model-mcp/skills/update-managed-repo/SKILL.md");
     expect(existsSync(skillPath)).toBe(true);
-    expect(readFileSync(skillPath, "utf8")).toContain("npm run update-repo");
+    expect(readFileSync(skillPath, "utf8")).toContain("bun run update-repo");
   });
 });
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `npm test -- --run tests/documents.test.ts`
+Run: `bun test ./tests/documents.test.ts`
 Expected: FAIL because the skill file does not exist yet
 
 - [ ] **Step 3: Write the skill and README**
@@ -443,10 +443,10 @@ description: Refresh the plugin-managed ITS Operating Model clone after confirmi
 
 # Update Managed Repo
 
-1. Run `npm run check-updates` from the plugin root.
+1. Run `bun run check-updates` from the plugin root.
 2. If no updates are available, tell the user the managed repository is already current.
 3. If updates are available, ask whether to apply them now.
-4. Only after confirmation, run `npm run update-repo`.
+4. Only after confirmation, run `bun run update-repo`.
 5. Report the new managed revision and remind the user that authoritative content may have changed.
 ```
 
@@ -457,15 +457,15 @@ This plugin manages a local clone of the ITS Operating Model repository and serv
 
 ## Setup
 
-1. `npm install`
-2. `npm run build`
-3. `npm run setup:repo`
+1. `bun install`
+2. `bun run build`
+3. `bun run setup:repo`
 
 ## Commands
 
-- `npm run check-updates`
-- `npm run update-repo`
-- `npm run start:mcp`
+- `bun run check-updates`
+- `bun run update-repo`
+- `bun run start:mcp`
 
 ## Managed update policy
 
@@ -475,7 +475,7 @@ It does not apply updates automatically.
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `npm test -- --run tests/documents.test.ts`
+Run: `bun test ./tests/documents.test.ts`
 Expected: PASS
 
 - [ ] **Step 5: Commit**
@@ -493,25 +493,25 @@ git commit -m "docs: add managed repo update skill and usage notes"
 - [ ] **Step 1: Add a verify script**
 
 ```json
-{"scripts":{"verify":"npm run test && npm run build"}}
+{"scripts":{"verify":"bun test && bun run build"}}
 ```
 
 - [ ] **Step 2: Run automated verification**
 
-Run: `npm run verify`
+Run: `bun run verify`
 Expected: PASS with Vitest and TypeScript build green
 
 - [ ] **Step 3: Run setup and update commands**
 
-Run: `npm run setup:repo`
+Run: `bun run setup:repo`
 Expected: PASS with `Managed repo installed at <plugin-root>/.runtime/ssd-its-operating-model`
 
-Run: `npm run check-updates`
+Run: `bun run check-updates`
 Expected: PASS with either `Managed repo is up to date` or `Update available`
 
 - [ ] **Step 4: Start the MCP server**
 
-Run: `npm run start:mcp`
+Run: `bun run start:mcp`
 Expected: PASS with the process waiting for stdio MCP requests and no startup errors
 
 - [ ] **Step 5: Commit**
