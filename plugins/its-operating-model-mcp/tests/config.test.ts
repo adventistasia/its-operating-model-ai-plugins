@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { closeSync, mkdtempSync, openSync, rmSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, resolve } from "node:path";
 import { execFileSync } from "node:child_process";
@@ -61,26 +61,34 @@ describe("config persistence", () => {
   });
 
   it("builds and keeps scaffold entrypoints runnable", () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "its-mcp-smoke-"));
+    roots.push(outputRoot);
+    const cliOutputPath = join(outputRoot, "cli.out");
+    const serverOutputPath = join(outputRoot, "server.out");
+
     execFileSync("bun", ["run", "build"], {
       cwd: pluginRoot,
       encoding: "utf8",
       stdio: "pipe",
     });
 
+    const cliOutputFd = openSync(cliOutputPath, "w");
     execFileSync("node", ["./dist/cli.js", "setup"], {
       cwd: pluginRoot,
-      encoding: "utf8",
-      stdio: "pipe",
+      stdio: ["ignore", cliOutputFd, "pipe"],
     });
+    closeSync(cliOutputFd);
+
+    const serverOutputFd = openSync(serverOutputPath, "w");
     execFileSync("node", ["./dist/server.js"], {
       cwd: pluginRoot,
-      encoding: "utf8",
-      stdio: "pipe",
+      stdio: ["ignore", serverOutputFd, "pipe"],
     });
+    closeSync(serverOutputFd);
 
-    const cliSource = readFileSync(join(pluginRoot, "src/cli.ts"), "utf8");
-    const serverSource = readFileSync(join(pluginRoot, "src/server.ts"), "utf8");
-    expect(cliSource).toContain("not implemented yet");
-    expect(serverSource).toContain("not implemented yet");
+    const cliOutput = readFileSync(cliOutputPath, "utf8");
+    const serverOutput = readFileSync(serverOutputPath, "utf8");
+    expect(cliOutput).toContain("not implemented yet");
+    expect(serverOutput).toContain("not implemented yet");
   });
 });
