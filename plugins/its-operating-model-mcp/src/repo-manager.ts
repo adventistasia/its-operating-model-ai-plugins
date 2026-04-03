@@ -28,6 +28,26 @@ export async function createManagedRepo(
   clone: (repoUrl: string, branch: string, targetPath: string) => Promise<string> = cloneRepo,
   validate: (repoPath: string) => ValidationResult = validateManagedRepo,
 ): Promise<PluginConfig> {
+  if (existsSync(config.repoPath)) {
+    if (config.setupCompleted) {
+      const validation = validate(config.repoPath);
+
+      if (!validation.ok) {
+        throw new Error(
+          `Managed repo already exists at ${config.repoPath} but is missing required files: ${validation.missing.join(", ")}. Delete the directory and re-run setup to re-clone it.`,
+        );
+      }
+
+      return {
+        ...config,
+        setupCompleted: true,
+      };
+    }
+
+    throw new Error(
+      `Cannot create managed repo at ${config.repoPath} because the target path already exists. Delete the directory and re-run setup to clone a fresh copy.`,
+    );
+  }
   const localCommit = await clone(config.repoUrl, config.trackedBranch, config.repoPath);
   const validation = validate(config.repoPath);
 
@@ -73,6 +93,13 @@ export async function checkForDailyUpdates(
     return { status: "skipped", config };
   }
 
+  if (!config.setupCompleted) {
+    throw new Error("Managed repo has not been set up yet.");
+  }
+
+  if (!existsSync(config.repoPath)) {
+    throw new Error(`Managed repo path does not exist: ${config.repoPath}`);
+  }
   const { localCommit, remoteCommit } = await fetch(config.repoPath, config.trackedBranch);
   const nextConfig: PluginConfig = {
     ...config,
