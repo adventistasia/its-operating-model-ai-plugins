@@ -110,7 +110,7 @@ plugins/its-operating-model-mcp/.runtime/
 Run: `bun test ./tests/config.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add .agents/plugins/marketplace.json .gitignore plugins/its-operating-model-mcp
