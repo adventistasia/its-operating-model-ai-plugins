@@ -47,7 +47,7 @@
 - Create: `plugins/its-operating-model-mcp/README.md`
 - Modify: `.gitignore`
 
-- [ ] **Step 1: Write the failing scaffold test**
+- [x] **Step 1: Write the failing scaffold test**
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -66,12 +66,12 @@ describe("plugin scaffold", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
-Run: `bun test -- --run tests/config.test.ts`
+Run: `bun test ./tests/config.test.ts`
 Expected: FAIL with missing manifest/config files
 
-- [ ] **Step 3: Add the minimal scaffold**
+- [x] **Step 3: Add the minimal scaffold**
 
 ```json
 // .agents/plugins/marketplace.json
@@ -105,9 +105,9 @@ plugins/its-operating-model-mcp/dist/
 plugins/its-operating-model-mcp/.runtime/
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
-Run: `bun test -- --run tests/config.test.ts`
+Run: `bun test ./tests/config.test.ts`
 Expected: PASS
 
 - [ ] **Step 5: Commit**

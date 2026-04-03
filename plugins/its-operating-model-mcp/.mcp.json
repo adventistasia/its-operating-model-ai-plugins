@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "its-operating-model": {
-      "command": "node",
+      "command": "bun",
       "args": [
         "./dist/server.js"
       ]

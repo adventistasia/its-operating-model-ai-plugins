@@ -4,11 +4,11 @@
   "description": "Managed ITS Operating Model MCP plugin",
   "author": {
     "name": "SSD ITS",
-    "email": "ssd.its@example.com",
-    "url": "https://example.com/ssd-its"
+    "email": "its@example.org",
+    "url": "https://github.com/adventistasia"
   },
-  "homepage": "https://example.com/its-operating-model-mcp",
-  "repository": "https://example.com/its-operating-model-mcp.git",
+  "homepage": "https://github.com/adventistasia/ssd-its-operating-model",
+  "repository": "https://github.com/adventistasia/ssd-its-operating-model",
   "license": "MIT",
   "keywords": [
     "its",
@@ -28,13 +28,14 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://example.com/its-operating-model-mcp",
-    "privacyPolicyURL": "https://example.com/privacy",
-    "termsOfServiceURL": "https://example.com/terms",
+    "websiteURL": "https://github.com/adventistasia/ssd-its-operating-model",
+    "privacyPolicyURL": "https://github.com/adventistasia/ssd-its-operating-model",
+    "termsOfServiceURL": "https://github.com/adventistasia/ssd-its-operating-model",
     "defaultPrompt": [
-      "Manage the local ITS Operating Model clone.",
-      "Check for updates and sync the repo."
+      "Open the ITS Operating Model start-here guide.",
+      "Find the right deliverable specification for this stage.",
+      "Check whether the managed ITS repo has updates."
     ],
-    "brandColor": "#0F766E"
+    "brandColor": "#1F5F8B"
   }
 }

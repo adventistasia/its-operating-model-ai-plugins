@@ -85,10 +85,36 @@ describe("its-operating-model-mcp scaffold", () => {
       version: "0.1.0",
       description: "Managed ITS Operating Model MCP plugin",
       mcpServers: "./.mcp.json",
+      author: {
+        name: "SSD ITS",
+        email: "its@example.org",
+        url: "https://github.com/adventistasia",
+      },
+      homepage: "https://github.com/adventistasia/ssd-its-operating-model",
+      repository: "https://github.com/adventistasia/ssd-its-operating-model",
+      interface: {
+        websiteURL: "https://github.com/adventistasia/ssd-its-operating-model",
+        privacyPolicyURL: "https://github.com/adventistasia/ssd-its-operating-model",
+        termsOfServiceURL: "https://github.com/adventistasia/ssd-its-operating-model",
+        brandColor: "#1F5F8B",
+        defaultPrompt: [
+          "Open the ITS Operating Model start-here guide.",
+          "Find the right deliverable specification for this stage.",
+          "Check whether the managed ITS repo has updates.",
+        ],
+      },
     });
     expect(mcp.mcpServers["its-operating-model"]).toMatchObject({
-      command: "node",
+      command: "bun",
       args: ["./dist/server.js"],
+    });
+    expect(pkg.scripts).toMatchObject({
+      build: "tsc -p tsconfig.json",
+      test: "vitest run",
+      "setup:repo": "bun ./dist/cli.js setup",
+      "check-updates": "bun ./dist/cli.js check-updates",
+      "update-repo": "bun ./dist/cli.js update-repo",
+      "start:mcp": "bun ./dist/server.js",
     });
     expect(tsconfig.include).toEqual(["src/**/*.ts"]);
     expect(readme).toContain("local clone");
