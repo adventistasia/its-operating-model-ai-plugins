@@ -1,15 +1,20 @@
 # ITS Operating Model MCP
 
-This plugin scaffold is the starting point for a tool that will manage a local clone of the ITS Operating Model repository.
-The declared runtime commands exist as placeholders for the later implementation and currently only report that the scaffold is not implemented yet.
+This plugin manages a local clone of the ITS Operating Model repository and serves authoritative documents through MCP.
 
-## Runtime commands
+## Setup
 
-- `bun run setup:repo`
+1. `bun install`
+2. `bun run build`
+3. `bun run setup:repo`
+
+## Commands
+
 - `bun run check-updates`
 - `bun run update-repo`
+- `bun run start:mcp`
 
-## Notes
+## Managed update policy
 
-- `bun run start:mcp` is wired to `dist/server.js`, which is a scaffold placeholder for now.
-- `bun run build` compiles the TypeScript source in `src/` to `dist/` once the scaffold is expanded.
+The plugin checks for upstream changes once per day on first use and tells the user when updates are available.
+It does not apply updates automatically.
