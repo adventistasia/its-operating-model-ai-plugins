@@ -1,0 +1,6 @@
+.obsidian/
+.worktrees/
+node_modules/
+plugins/its-operating-model-mcp/node_modules/
+plugins/its-operating-model-mcp/dist/
+plugins/its-operating-model-mcp/.runtime/

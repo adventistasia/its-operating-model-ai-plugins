@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "its-operating-model": {
+      "command": "node",
+      "args": [
+        "./dist/server.js"
+      ]
+    }
+  }
+}

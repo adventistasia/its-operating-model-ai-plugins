@@ -1,0 +1,40 @@
+{
+  "name": "its-operating-model-mcp",
+  "version": "0.1.0",
+  "description": "Managed ITS Operating Model MCP plugin",
+  "author": {
+    "name": "SSD ITS",
+    "email": "ssd.its@example.com",
+    "url": "https://example.com/ssd-its"
+  },
+  "homepage": "https://example.com/its-operating-model-mcp",
+  "repository": "https://example.com/its-operating-model-mcp.git",
+  "license": "MIT",
+  "keywords": [
+    "its",
+    "operating-model",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "ITS Operating Model MCP",
+    "shortDescription": "Managed local access to ITS operating model documents",
+    "longDescription": "Installs and manages a local ITS Operating Model clone and serves authoritative docs through MCP.",
+    "developerName": "SSD ITS",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://example.com/its-operating-model-mcp",
+    "privacyPolicyURL": "https://example.com/privacy",
+    "termsOfServiceURL": "https://example.com/terms",
+    "defaultPrompt": [
+      "Manage the local ITS Operating Model clone.",
+      "Check for updates and sync the repo."
+    ],
+    "brandColor": "#0F766E"
+  }
+}

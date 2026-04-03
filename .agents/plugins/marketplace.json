@@ -1,0 +1,20 @@
+{
+  "name": "local-repo-plugins",
+  "interface": {
+    "displayName": "Local Repo Plugins"
+  },
+  "plugins": [
+    {
+      "name": "its-operating-model-mcp",
+      "source": {
+        "source": "local",
+        "path": "./plugins/its-operating-model-mcp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
