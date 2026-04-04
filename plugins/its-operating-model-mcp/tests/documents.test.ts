@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { getDocumentByName, getStageGuidance } from "../src/documents";
 
 describe("document routing", () => {
@@ -23,7 +24,7 @@ describe("document routing", () => {
 
 describe("manual update skill", () => {
   it("documents the managed update workflow", () => {
-    const skillPath = resolve(process.cwd(), "skills/update-managed-repo/SKILL.md");
+    const skillPath = resolve(dirname(fileURLToPath(import.meta.url)), "../skills/update-managed-repo/SKILL.md");
 
     expect(existsSync(skillPath)).toBe(true);
     expect(readFileSync(skillPath, "utf8")).toContain("bun run update-repo");

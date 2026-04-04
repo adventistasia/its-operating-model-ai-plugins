@@ -1,6 +1,7 @@
-import { dirname, join } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { loadPluginConfig, savePluginConfig } from "./config.js";
+import { currentDir } from "./meta.js";
 import {
   applyRepoUpdate,
   checkForDailyUpdates,
@@ -37,7 +38,7 @@ export function formatUpdateMessage(result: {
 
 export async function main(): Promise<void> {
   const { command } = parseCliArgs(process.argv.slice(2));
-  const pluginRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+  const pluginRoot = join(currentDir(import.meta.url), "..");
   let config = loadPluginConfig(pluginRoot);
 
   if (command === "setup") {
@@ -45,6 +46,11 @@ export async function main(): Promise<void> {
     savePluginConfig(pluginRoot, config);
     console.log(`Managed repo installed at ${config.repoPath}`);
     return;
+  }
+
+  if (!config.setupCompleted) {
+    console.error("Managed repo has not been set up. Run: bun run setup:repo");
+    process.exit(1);
   }
 
   const today = new Date().toISOString().slice(0, 10);

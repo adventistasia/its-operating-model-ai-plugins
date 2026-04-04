@@ -1,18 +1,32 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { loadPluginConfig } from "./config.js";
 import { getDocumentByName, getStageGuidance } from "./documents.js";
+import { currentDir } from "./meta.js";
 
 const server = new McpServer({ name: "its-operating-model", version: "0.1.0" });
 
 function readManagedDocument(relativePath: string): string {
-  const pluginRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+  const pluginRoot = join(currentDir(import.meta.url), "..");
   const config = loadPluginConfig(pluginRoot);
-  return readFileSync(join(config.repoPath, relativePath), "utf8");
+
+  if (!config.setupCompleted) {
+    return "Plugin not set up. Run: bun run setup:repo";
+  }
+
+  if (!existsSync(config.repoPath)) {
+    return `Managed repo not found at ${config.repoPath}. Run: bun run setup:repo`;
+  }
+
+  try {
+    return readFileSync(join(config.repoPath, relativePath), "utf8");
+  } catch {
+    return `Could not read file: ${relativePath}. Run: bun run setup:repo`;
+  }
 }
 
 server.tool("get_document", { name: z.string() }, async ({ name }) => {
@@ -49,4 +63,14 @@ server.tool(
   },
 );
 
-await server.connect(new StdioServerTransport());
+async function main(): Promise<void> {
+  await server.connect(new StdioServerTransport());
+}
+
+const invokedAsEntryPoint =
+  typeof process.argv[1] === "string" &&
+  import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (invokedAsEntryPoint) {
+  void main();
+}
