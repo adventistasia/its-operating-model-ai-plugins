@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
+    "verify": "bun test && bun run build",
     "setup:repo": "bun ./dist/cli.js setup",
     "check-updates": "bun ./dist/cli.js check-updates",
     "update-repo": "bun ./dist/cli.js update-repo",
